@@ -119,3 +119,32 @@ jobs:
           name: fulltclash-s930x
           path: ./output/*
           if-no-files-found: error
+  Windowsmacbuild:
+    name: Windowsmacbuild
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-13, windows-latest]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+      - name: build 
+        run: |
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          cd FullTclash 
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build
+        run: go build -buildmode=c-shared -o ./output/fulltclash-${{ matrix.os }}-amd64 ./libs/fulltclash.go
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: fulltclash-${{ matrix.os }}-amd64
+          path: ./output/*
+          if-no-files-found: error
