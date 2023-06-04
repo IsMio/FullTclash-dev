@@ -41,7 +41,7 @@ jobs:
           mkdir -p FullTclashcore
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
-          cd libs
+          cd FullTclashcore/libs
           rm -rf !(fulltclash.go)
           CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
@@ -78,7 +78,7 @@ jobs:
           mkdir -p FullTclashcore
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
-          cd libs
+          cd FullTclashcore/libs
           rm -rf !(fulltclash.go)
           CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
@@ -115,7 +115,7 @@ jobs:
           mkdir -p FullTclashcore
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
-          cd libs
+          cd FullTclashcore/libs
           rm -rf !(fulltclash.go)
           CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
@@ -152,7 +152,7 @@ jobs:
           mkdir -p FullTclashcore
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
-          cd libs
+          cd FullTclashcorelibs
           rm -rf !(fulltclash.go)
           CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
