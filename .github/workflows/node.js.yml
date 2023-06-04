@@ -16,7 +16,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
@@ -51,7 +51,7 @@ jobs:
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: FullTclash-linux-386.tar.gz
@@ -87,7 +87,7 @@ jobs:
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: core-linux-amd64.tar.gz
@@ -123,7 +123,7 @@ jobs:
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: core-linux-arm64.tar.gz
@@ -159,7 +159,7 @@ jobs:
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: core-linux-s390x.tar.gz
