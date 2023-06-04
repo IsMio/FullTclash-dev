@@ -1,0 +1,167 @@
+name: Release FullTClash libs
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+  linux386build:
+    name: build core 386 version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux 386 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          mv FullTclash/libs/ ./
+          rm -rf FullTclash
+          cd libs
+          rm -rf !(fulltclash.go)
+          CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -o FullTclash.so -v fulltclash.go
+          rm -rf fulltclash.go
+          cd ..
+          cd ..
+      - name: package
+        run: tar -zcvf FullTclash-linux-386.tar.gz libs
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: FullTclash-linux-386.tar.gz
+          asset_name: FullTclash-linux-386.tar.gz
+          asset_content_type: application/gzip
+
+  linuxamd64build:
+    name: build core amd64 version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux amd64 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          mv FullTclash/libs/ ./
+          rm -rf FullTclash
+          cd libs
+          rm -rf !(fulltclash.go)
+          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o FullTclash.so -v fulltclash.go
+          rm -rf fulltclash.go
+          cd ..
+          cd ..
+      - name: package
+        run: tar -zcvf core-linux-amd64.tar.gz libs
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: core-linux-amd64.tar.gz
+          asset_name: core-linux-amd64.tar.gz
+          asset_content_type: application/gzip
+
+  linuxarm64build:
+    name: build core arm64 version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux arm64 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates gcc-aarch64-linux-gnu
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          mv FullTclash/libs/ ./
+          rm -rf FullTclash
+          cd libs
+          rm -rf !(fulltclash.go)
+          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
+          rm -rf fulltclash.go
+          cd ..
+          cd ..
+      - name: package
+        run: tar -zcvf core-linux-arm64.tar.gz libs
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: core-linux-arm64.tar.gz
+          asset_name: core-linux-arm64.tar.gz
+          asset_content_type: application/gzip
+
+  linuxs390xbuild:
+    name: build core s390x version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux s390x version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates gcc-s390x-linux-gnu
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          mv FullTclash/libs/ ./
+          rm -rf FullTclash
+          cd libs
+          rm -rf !(fulltclash.go)
+          CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
+          rm -rf fulltclash.go
+          cd ..
+          cd ..
+      - name: package
+        run: tar -zcvf core-linux-s390x.tar.gz libs
+      - name: upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: core-linux-s390x.tar.gz
+          asset_name: core-linux-s390x.tar.gz
+          asset_content_type: application/gzip
