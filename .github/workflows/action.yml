@@ -9,19 +9,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          tag_name: 3.5.9
-          release_name: 3.5.9
-          draft: false
-          prerelease: false
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
   linuxbuild386:
     name: build 386core version
     needs: release
