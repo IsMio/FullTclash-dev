@@ -36,7 +36,7 @@ jobs:
       - name: build linux 386 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
@@ -68,7 +68,7 @@ jobs:
       - name: build linux amd64 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
@@ -99,7 +99,7 @@ jobs:
       - name: build linux 386 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-aarch64-linux-gnu
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-aarch64-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
@@ -130,7 +130,7 @@ jobs:
       - name: build linux 386 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-s390x-linux-gnu
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-s390x-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
