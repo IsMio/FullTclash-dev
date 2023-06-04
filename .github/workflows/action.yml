@@ -45,14 +45,20 @@ jobs:
         run: go mod tidy
       - name: Build 386
         run: CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -buildmode=c-shared -o fulltclash-linux-386 ./libs/fulltclash.go
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            fulltclash-linux-s386
-            fulltclash-linux-s386.h
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }} 
+          asset_path:  |
+            fulltclash-linux-386
+            fulltclash-linux-386.h
+          asset_name:  |
+            fulltclash-linux-s390x
+            fulltclash-linux-s390x.h
+          asset_content_type: application/zip
         
   linuxbuildamd64:
     name: build amd64core version
@@ -77,14 +83,20 @@ jobs:
         run: go mod tidy
       - name: Build amd64
         run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o fulltclash-linux-amd64 ./libs/fulltclash.go
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          files: |
+          upload_url: ${{ needs.release.outputs.upload_url }} 
+          asset_path:  |
             fulltclash-linux-amd64
             fulltclash-linux-amd64.h
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          asset_name:  |
+            fulltclash-linux-amd64
+            fulltclash-linux-amd64.h
+          asset_content_type: application/zip
   linuxbuildarm64:
     name: build arm64core version
     needs: release
@@ -108,14 +120,20 @@ jobs:
         run: go mod tidy
       - name: Build arm64
         run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o fulltclash-linux-arm64 ./libs/fulltclash.go
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          files: |
+          upload_url: ${{ needs.release.outputs.upload_url }} 
+          asset_path:  |
             fulltclash-linux-arm64
             fulltclash-linux-arm64.h
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          asset_name:  |
+            fulltclash-linux-arm64
+            fulltclash-linux-arm64.h
+          asset_content_type: application/zip
   linuxbuilds930x:
     name: build s930xcore version
     needs: release
@@ -139,11 +157,17 @@ jobs:
         run: go mod tidy
       - name: Build s390x
         run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o fulltclash-linux-s386x ./libs/fulltclash.go
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          files: |
+          upload_url: ${{ needs.release.outputs.upload_url }} 
+          asset_path:  |
             fulltclash-linux-s390x
             fulltclash-linux-s390x.h
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          asset_name:  |
+            fulltclash-linux-s390x
+            fulltclash-linux-s390x.h
+          asset_content_type: application/zip
