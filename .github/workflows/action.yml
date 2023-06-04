@@ -8,10 +8,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goos: [linux, windows, darwin] # 需要打包的系统
-        goarch: [amd64, arm64]
     container: docker.io/ubuntu:18.04
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
