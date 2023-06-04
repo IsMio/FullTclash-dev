@@ -45,8 +45,6 @@ jobs:
         run: go mod tidy
       - name: Build
         run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-          cd ..
-          cd ..
       - name: package
         run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
@@ -82,8 +80,7 @@ jobs:
         run: go mod tidy
       - name: Build
         run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-          cd ..
-          cd ..
+ 
       - name: package
         run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
@@ -118,9 +115,7 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-          cd ..
-          cd ..
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go 
       - name: package
         run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
@@ -155,9 +150,7 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-          cd ..
-          cd ..
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go 
       - name: package
         run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
