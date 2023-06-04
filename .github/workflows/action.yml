@@ -22,8 +22,8 @@ jobs:
           release_name: 3.5.9
           draft: false
           prerelease: false
-  linuxbuild:
-    name: build core version
+  linuxbuild386:
+    name: build 386core version
     needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
@@ -36,7 +36,7 @@ jobs:
       - name: build linux 386 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib gcc-aarch64-linux-gnu gcc-s390x-linux-gnu
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
@@ -45,22 +45,104 @@ jobs:
         run: go mod tidy
       - name: Build 386
         run: CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -buildmode=c-shared -o fulltclash-linux-386 ./libs/fulltclash.go
-      - name: Build amd64
-        run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o fulltclash-linux-amd64 ./libs/fulltclash.go
-      - name: Build arm64
-        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o fulltclash-linux-arm64 ./libs/fulltclash.go
-      - name: Build s390x
-        run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o fulltclash-linux-s386x ./libs/fulltclash.go
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             fulltclash-linux-s386
             fulltclash-linux-s386.h
-            fulltclash-linux-arm64
-            fulltclash-linux-arm64.h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+  linuxbuildamd64:
+    name: build amd64core version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux amd64 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build amd64
+        run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o fulltclash-linux-amd64 ./libs/fulltclash.go
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
             fulltclash-linux-amd64
             fulltclash-linux-amd64.h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  linuxbuildarm64:
+    name: build arm64core version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux 386 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-aarch64-linux-gnu
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build arm64
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o fulltclash-linux-arm64 ./libs/fulltclash.go
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            fulltclash-linux-arm64
+            fulltclash-linux-arm64.h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  linuxbuilds930x:
+    name: build s930xcore version
+    needs: release
+    runs-on: ubuntu-latest
+    container: docker.io/ubuntu:18.04
+    steps:
+      - uses: actions/checkout@v3.5.2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: build linux 386 version
+        run: |
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-s390x-linux-gnu
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build s390x
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o fulltclash-linux-s386x ./libs/fulltclash.go
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
             fulltclash-linux-s390x
             fulltclash-linux-s390x.h
         env:
