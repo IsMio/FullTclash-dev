@@ -38,7 +38,8 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mv FullTclash/libs/ ./
+          mkdir -p FullTclashcore
+          mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd libs
           rm -rf !(fulltclash.go)
@@ -74,7 +75,8 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates build-essential git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mv FullTclash/libs/ ./
+          mkdir -p FullTclashcore
+          mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd libs
           rm -rf !(fulltclash.go)
@@ -110,7 +112,8 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates gcc-aarch64-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mv FullTclash/libs/ ./
+          mkdir -p FullTclashcore
+          mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd libs
           rm -rf !(fulltclash.go)
@@ -146,7 +149,8 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates gcc-s390x-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mv FullTclash/libs/ ./
+          mkdir -p FullTclashcore
+          mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd libs
           rm -rf !(fulltclash.go)
