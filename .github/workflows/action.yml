@@ -38,19 +38,17 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mkdir -p FullTclashcore
-          mv FullTclash/libs/ FullTclashcore
-          rm -rf FullTclash
-          cd FullTclashcore/libs
-          rm -rf fulltclash.dll 
-          rm -rf  fulltclash.h  
-          rm -rf fulltclash.so  
-          CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -o FullTclash.so -v fulltclash.go
-          rm -rf fulltclash.go
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
           cd ..
           cd ..
       - name: package
-        run: tar -zcvf FullTclash-linux-386.tar.gz libs
+        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
@@ -77,19 +75,17 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates build-essential git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mkdir -p FullTclashcore
-          mv FullTclash/libs/ FullTclashcore
-          rm -rf FullTclash
-          cd FullTclashcore/libs
-          rm -rf fulltclash.dll 
-          rm -rf  fulltclash.h  
-          rm -rf fulltclash.so
-          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o FullTclash.so -v fulltclash.go
-          rm -rf fulltclash.go
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
           cd ..
           cd ..
       - name: package
-        run: tar -zcvf core-linux-amd64.tar.gz libs
+        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
@@ -116,19 +112,17 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates gcc-aarch64-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mkdir -p FullTclashcore
-          mv FullTclash/libs/ FullTclashcore
-          rm -rf FullTclash
-          cd FullTclashcore/libs
-          rm -rf fulltclash.dll 
-          rm -rf  fulltclash.h  
-          rm -rf fulltclash.so  
-          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
-          rm -rf fulltclash.go
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
           cd ..
           cd ..
       - name: package
-        run: tar -zcvf core-linux-arm64.tar.gz libs
+        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
@@ -155,19 +149,17 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates gcc-s390x-linux-gnu git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          mkdir -p FullTclashcore
-          mv FullTclash/libs/ FullTclashcore
-          rm -rf FullTclash
-          cd FullTclashcorelibs
-          rm -rf fulltclash.dll 
-          rm -rf  fulltclash.h  
-          rm -rf fulltclash.so  
-          CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
-          rm -rf fulltclash.go
+          cd FullTclash     
+      - name: gomod1
+        run: go mod init myclash
+      - name: gomod2
+        run: go mod tidy
+      - name: Build
+        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
           cd ..
           cd ..
       - name: package
-        run: tar -zcvf core-linux-s390x.tar.gz libs
+        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
