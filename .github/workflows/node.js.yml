@@ -42,7 +42,11 @@ jobs:
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd FullTclashcore/libs
-          rm -rf !(fulltclash.go)
+          rm -rf fulltclash.dll 
+          rm -rf  fulltclash.h  
+          rm -rf fulltclash.so  
+          rm -rf pynat.py 
+          rm -rf rootCA.crt
           CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
           cd ..
@@ -79,7 +83,11 @@ jobs:
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd FullTclashcore/libs
-          rm -rf !(fulltclash.go)
+          rm -rf fulltclash.dll 
+          rm -rf  fulltclash.h  
+          rm -rf fulltclash.so  
+          rm -rf pynat.py 
+          rm -rf rootCA.crt
           CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
           cd ..
@@ -116,7 +124,11 @@ jobs:
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd FullTclashcore/libs
-          rm -rf !(fulltclash.go)
+          rm -rf fulltclash.dll 
+          rm -rf  fulltclash.h  
+          rm -rf fulltclash.so  
+          rm -rf pynat.py 
+          rm -rf rootCA.crt
           CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
           cd ..
@@ -153,7 +165,11 @@ jobs:
           mv FullTclash/libs/ FullTclashcore
           rm -rf FullTclash
           cd FullTclashcorelibs
-          rm -rf !(fulltclash.go)
+          rm -rf fulltclash.dll 
+          rm -rf  fulltclash.h  
+          rm -rf fulltclash.so  
+          rm -rf pynat.py 
+          rm -rf rootCA.crt
           CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o FullTclash.so -v fulltclash.go
           rm -rf fulltclash.go
           cd ..
