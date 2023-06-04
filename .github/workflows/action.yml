@@ -6,17 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    container: docker.io/ubuntu:18.04
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
   linuxbuild386:
     name: build 386core version
-    needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
@@ -46,7 +37,6 @@ jobs:
         
   linuxbuildamd64:
     name: build amd64core version
-    needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
@@ -75,7 +65,6 @@ jobs:
           if-no-files-found: error
   linuxbuildarm64:
     name: build arm64core version
-    needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
@@ -104,7 +93,6 @@ jobs:
           if-no-files-found: error
   linuxbuilds930x:
     name: build s930xcore version
-    needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
