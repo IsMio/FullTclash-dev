@@ -44,7 +44,7 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
       - name: package
         run: tar -zcvf FullTclash-linux-386.tar.gz ./output
       - name: upload
@@ -73,16 +73,15 @@ jobs:
           apt-get update
           apt install -y sudo curl wget unzip ca-certificates build-essential git
           git clone https://github.com/AirportR/FullTclash.git -b dev
-          cd FullTclash     
+          cd FullTclash
       - name: gomod1
         run: go mod init myclash
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
- 
+        run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
       - name: package
-        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
+        run: tar -zcvf FullTclash-linux-amd64.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
@@ -115,9 +114,9 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go 
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
       - name: package
-        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
+        run: tar -zcvf FullTclash-linux-arm64.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
@@ -150,9 +149,9 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build
-        run: go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go 
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
       - name: package
-        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
+        run: tar -zcvf FullTclash-linux-s390x.tar.gz ./output
       - name: upload
         uses: actions/upload-release-asset@v1
         env:
