@@ -8,6 +8,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin] # 需要打包的系统
+        goarch: [amd64, arm64]
     container: docker.io/ubuntu:18.04
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -22,8 +26,8 @@ jobs:
           release_name: 3.5.9
           draft: false
           prerelease: false
-  linux386build:
-    name: build core 386 version
+  linuxbuild:
+    name: build core version
     needs: release
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
@@ -36,128 +40,32 @@ jobs:
       - name: build linux 386 version
         run: |
           apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib aarch64-linux-gnu gcc-s390x-linux-gnu
           git clone https://github.com/AirportR/FullTclash.git -b dev
           cd FullTclash     
       - name: gomod1
         run: go mod init myclash
       - name: gomod2
         run: go mod tidy
-      - name: Build
-        run: CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-      - name: package
-        run: tar -zcvf FullTclash-linux-386.tar.gz ./output
-      - name: upload
-        uses: actions/upload-release-asset@v1
+      - name: Build 386
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=386 go build -buildmode=c-shared -o fulltclash-linux-386 ./libs/fulltclash.go
+      - name: Build amd64
+        run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o fulltclash-linux-amd64 ./libs/fulltclash.go
+      - name: Build arm64
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o fulltclash-linux-arm64 ./libs/fulltclash.go
+      - name: Build s390x
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o fulltclash-linux-s386x ./libs/fulltclash.go
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            fulltclash-linux-s386
+            fulltclash-linux-s386.h
+            fulltclash-linux-arm64
+            fulltclash-linux-arm64.h
+            fulltclash-linux-amd64
+            fulltclash-linux-amd64.h
+            fulltclash-linux-s390x
+            fulltclash-linux-s390x.h
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: FullTclash-linux-386.tar.gz
-          asset_name: FullTclash-linux-386.tar.gz
-          asset_content_type: application/gzip
-
-  linuxamd64build:
-    name: build core amd64 version
-    needs: release
-    runs-on: ubuntu-latest
-    container: docker.io/ubuntu:18.04
-    steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: stable
-      - name: build linux amd64 version
-        run: |
-          apt-get update
-          apt install -y sudo curl wget unzip ca-certificates build-essential git
-          git clone https://github.com/AirportR/FullTclash.git -b dev
-          cd FullTclash
-      - name: gomod1
-        run: go mod init myclash
-      - name: gomod2
-        run: go mod tidy
-      - name: Build
-        run:  CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-      - name: package
-        run: tar -zcvf FullTclash-linux-amd64.tar.gz ./output
-      - name: upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: core-linux-amd64.tar.gz
-          asset_name: core-linux-amd64.tar.gz
-          asset_content_type: application/gzip
-
-  linuxarm64build:
-    name: build core arm64 version
-    needs: release
-    runs-on: ubuntu-latest
-    container: docker.io/ubuntu:18.04
-    steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: stable
-      - name: build linux arm64 version
-        run: |
-          apt-get update
-          apt install -y sudo curl wget unzip ca-certificates gcc-aarch64-linux-gnu git
-          git clone https://github.com/AirportR/FullTclash.git -b dev
-          cd FullTclash     
-      - name: gomod1
-        run: go mod init myclash
-      - name: gomod2
-        run: go mod tidy
-      - name: Build
-        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-      - name: package
-        run: tar -zcvf FullTclash-linux-arm64.tar.gz ./output
-      - name: upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: core-linux-arm64.tar.gz
-          asset_name: core-linux-arm64.tar.gz
-          asset_content_type: application/gzip
-
-  linuxs390xbuild:
-    name: build core s390x version
-    needs: release
-    runs-on: ubuntu-latest
-    container: docker.io/ubuntu:18.04
-    steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: stable
-      - name: build linux s390x version
-        run: |
-          apt-get update
-          apt install -y sudo curl wget unzip ca-certificates gcc-s390x-linux-gnu git
-          git clone https://github.com/AirportR/FullTclash.git -b dev
-          cd FullTclash     
-      - name: gomod1
-        run: go mod init myclash
-      - name: gomod2
-        run: go mod tidy
-      - name: Build
-        run: CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -buildmode=c-shared -o ./output/fulltclash-linux-386 ./libs/fulltclash.go
-      - name: package
-        run: tar -zcvf FullTclash-linux-s390x.tar.gz ./output
-      - name: upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: core-linux-s390x.tar.gz
-          asset_name: core-linux-s390x.tar.gz
-          asset_content_type: application/gzip
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
