@@ -14,20 +14,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Pull from remote repository
-        run: |
-          git remote add upstream https://github.com/AirportR/FullTclash.git
-          git fetch upstream dev
-          git checkout dev
-          git pull upstream dev
-      
-      - name: Push to target repository
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: dev
 
+      - name: Clone FullTclash repository
+        run: git clone --depth=1 --branch=dev https://github.com/AirportR/FullTclash
+
+      - name: Copy files
+        run: cp -r FullTclash/* .
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Pull dev branch from AirportR/FullTclash"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
   linuxbuild386:
     name: build 386core version
     needs: pull_and_push
