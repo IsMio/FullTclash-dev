@@ -3,6 +3,7 @@
 <div align="center">  
     <h1> FullTClash</h1>  
     <p>🤖 A Telegram bot that operates based on the Clash core </p>  
+    <p><a href="https://github.com/IsMio/FullTclash-dev/actions/workflows/action.yml"><img src="https://github.com/IsMio/FullTclash-dev/actions/workflows/action.yml/badge.svg"></a></p>
     <p>English        <a href="https://github.com/AirportR/FullTclash/blob/dev/README.md">简体中文</a></p>   
     <a href="https://fulltclash.gitbook.io/fulltclash-doc"><img src="https://img.shields.io/static/v1?message=doc&color=blue&logo=micropython&label=FullTClash"></a> 
     <img src="https://img.shields.io/github/license/AirportR/FullTclash">  
