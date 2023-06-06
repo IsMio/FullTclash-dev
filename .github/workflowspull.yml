@@ -1,6 +1,9 @@
 name: Pull and Push Workflow
 
 on:
+  push:
+    tags:
+      - v*
   schedule:
     - cron: '0 0 * * *'
 
