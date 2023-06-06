@@ -105,9 +105,7 @@ jobs:
       - name: gomod2
         run: go mod tidy
       - name: Build arm64
-        run: | 
-          cd FullTclash 
-          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o ./output/fulltclash-linux-arm64 ./libs/fulltclash.go
+        run: CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o ./output/fulltclash-linux-arm64 ./libs/fulltclash.go
       - name: Upload  Asset 
         uses: actions/upload-artifact@v2
         with:
