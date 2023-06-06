@@ -34,8 +34,8 @@ jobs:
     steps:
       - name: build linux 386 version
         run: |
-          apt update -y
-          apt install ca-certificates -y
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           update-ca-certificates
   
       - uses: actions/checkout@v3.5.2
@@ -64,8 +64,8 @@ jobs:
     steps:
       - name: build linux amd64 version
         run: |
-          apt update -y
-          apt install ca-certificates -y
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-multilib git
           update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
@@ -92,8 +92,9 @@ jobs:
     steps:
       - name: build linux arm64 version
         run: |
-         apt-get install ca-certificates
-         update-ca-certificates
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-aarch64-linux-gnu git
+          update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -114,15 +115,15 @@ jobs:
           path: ./output/*
           if-no-files-found: error
   linuxbuilds930x:
-    name: build s930xcore version
+    name: build s390xcore version
     needs: pull_and_push
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
-      - name: build linux s930x version
+      - name: build linux s390x version
         run: |
-          apt update -y
-          apt install ca-certificates -y
+          apt-get update
+          apt install -y sudo curl wget unzip ca-certificates build-essential gcc-s390x-linux-gnu git
           update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
@@ -138,7 +139,7 @@ jobs:
       - name: Upload  Asset 
         uses: actions/upload-artifact@v2
         with:
-          name: fulltclash-s930x
+          name: fulltclash-s390x
           path: ./output/*
           if-no-files-found: error
   Windowsmacbuild:
