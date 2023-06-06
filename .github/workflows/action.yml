@@ -32,6 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
+      - name: build linux 386 version
+        run: |
+         apt-get install ca-certificates
+         update-ca-certificates
+  
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -56,6 +61,10 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
+      - name: build linux amd64 version
+        run: |
+         apt-get install ca-certificates
+         update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -79,6 +88,10 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
+      - name: build linux arm64 version
+        run: |
+         apt-get install ca-certificates
+         update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -88,6 +101,10 @@ jobs:
         run: go mod init myclash
       - name: gomod2
         run: go mod tidy
+      - name: Build arm64
+        run: | 
+          cd FullTclash 
+          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o ./output/fulltclash-linux-arm64 ./libs/fulltclash.go
       - name: Upload  Asset 
         uses: actions/upload-artifact@v2
         with:
@@ -100,6 +117,10 @@ jobs:
     runs-on: ubuntu-latest
     container: docker.io/ubuntu:18.04
     steps:
+      - name: build linux s930x version
+        run: |
+         apt-get install ca-certificates
+         update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -125,6 +146,10 @@ jobs:
       matrix:
         os: [macos-13, windows-latest]
     steps:
+      - name: build 
+        run: |
+          git clone https://github.com/AirportR/FullTclash.git -b dev
+          cd FullTclash 
       - name: Check out code
         uses: actions/checkout@v3
       - name: Set up Go
