@@ -1,12 +1,14 @@
-name: Sync Forked Repository
+name: Pull and Push Workflow
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC时间00:00触发
+    - cron: '0 0 * * *'
+
 jobs:
   pull_and_push:
     runs-on: ubuntu-latest
-steps:
+
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       
@@ -20,6 +22,5 @@ steps:
       - name: Push to target repository
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.ACCESS_TOKEN }}
-          branch: main
-              
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev
