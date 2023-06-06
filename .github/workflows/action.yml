@@ -17,7 +17,13 @@ jobs:
 
       - name: Clone FullTclash repository
         run: git clone --depth=1 --branch=dev https://github.com/AirportR/FullTclash
-
+      - name: remove md
+        run: |
+          cd FullTclash 
+          rm -rf README.md
+          rm -rf README-EN.md
+          cd ..
+        
       - name: Copy files
         run: cp -r FullTclash/* .
 
