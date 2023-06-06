@@ -34,8 +34,8 @@ jobs:
     steps:
       - name: build linux 386 version
         run: |
-          apt update
-          apt install ca-certificates
+          apt update -y
+          apt install ca-certificates -y
           update-ca-certificates
   
       - uses: actions/checkout@v3.5.2
@@ -64,8 +64,8 @@ jobs:
     steps:
       - name: build linux amd64 version
         run: |
-          apt update
-          apt install ca-certificates
+          apt update -y
+          apt install ca-certificates -y
           update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
@@ -121,8 +121,8 @@ jobs:
     steps:
       - name: build linux s930x version
         run: |
-          apt update
-          apt install ca-certificates
+          apt update -y
+          apt install ca-certificates -y
           update-ca-certificates
       - uses: actions/checkout@v3.5.2
       - name: Set up Go
