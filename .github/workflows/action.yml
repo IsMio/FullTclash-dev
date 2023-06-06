@@ -1,6 +1,5 @@
 name: Release FullTClash libs
 on:
-  schedule: [{cron: "0 * * * *"}]
   push:
     tags:
       - v*
