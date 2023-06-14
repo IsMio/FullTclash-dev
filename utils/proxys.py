@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import json
 import socket
 import os
@@ -11,7 +12,7 @@ from aiohttp import ClientConnectorError
 from cryptography.hazmat.primitives.ciphers.aead import ChaCha20Poly1305
 from loguru import logger
 from utils.cleaner import config
-from utils.safe import sha256_32bytes, DEFAULT_NONCE
+from utils.safe import sha256_32bytes, DEFAULT_NONCE2
 
 """
 这个模块主要是一些对clash 动态库 api的python调用
@@ -111,7 +112,7 @@ class FullTClash:
             return
             # 使用chacha20算法加密消息，使用固定的nonce
         chacha = ChaCha20Poly1305(sha256_32bytes(key))
-        ciphertext = chacha.encrypt(DEFAULT_NONCE, message.encode(), None)
+        ciphertext = chacha.encrypt(DEFAULT_NONCE2, message.encode(), None)
         # 发送加密后的消息给服务器
         await _loop.sock_sendall(s, ciphertext)
         # await _loop.sock_sendall(s, ciphertext)
@@ -136,7 +137,7 @@ class FullTClash:
         newkey = sha256_32bytes(key)
         # 使用chacha20算法加密消息，使用固定的nonce
         chacha = ChaCha20Poly1305(newkey)
-        ciphertext = chacha.encrypt(DEFAULT_NONCE, message.encode(), None)
+        ciphertext = chacha.encrypt(DEFAULT_NONCE2, message.encode(), None)
         # 发送加密后的消息给服务器
         s.sendall(ciphertext)
         # await asyncio.get_event_loop().sock_sendall(s, ciphertext)
@@ -152,16 +153,17 @@ class FullTClash:
         """
         addr = f"http://127.0.0.1:{port}"
         ttfb = 0
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         try:
             async with aiohttp.ClientSession() as session:
                 start = loop.time()
-                async with session.get(pingurl, proxy=addr) as _:
-                    pass
-                async with session.get(pingurl, proxy=addr) as _:
+                with contextlib.suppress(asyncio.exceptions.TimeoutError):
+                    async with session.get(pingurl, proxy=addr, timeout=5) as _:
+                        pass
+                async with session.get(pingurl, proxy=addr, timeout=10) as _:
                     end = loop.time()
                     ttfb2 = end - start
-                    print(f"TTFB2 for {pingurl} is {ttfb2:.3f} seconds")
+                    # print(f"TTFB for {pingurl} is {ttfb2:.3f} seconds")
                 ttfb = int(ttfb2 / 2 * 1000)
         except Exception as e:
             logger.warning(str(e))

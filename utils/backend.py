@@ -176,8 +176,7 @@ class Speedtest:
 
     @property
     def max_speed(self) -> Union[int, float]:
-        tmp_speed_list = self.speed_list
-        return max(tmp_speed_list)
+        return max(self.speed_list) if self.speed_list else 0
 
     async def record(self, received: Union[int, float]):
         cur_time = time.time()
@@ -306,7 +305,7 @@ class SpeedCore(Basecore):
             ]
             await asyncio.wait(tasks)
             st.show_progress_full()
-            spmean = st.total_red / st.time_used
+            spmean = st.total_red / st.time_used if st.time_used else 0
             spmax = st.max_speed
             if spmean > spmax:
                 spmean, spmax = spmax, spmean
@@ -431,7 +430,6 @@ class ScriptCore(Basecore):
         """
         info = []
         delay = await proxys.FullTClash.urltest(port)
-        # delay = (index + 1) * 20
         if delay == 0:
             logger.warning("超时节点，跳过测试")
             for t in test_items:
