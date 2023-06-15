@@ -598,7 +598,7 @@ class Collector:
             if reconnection != 0:
                 await self.fetch_dis(session=session, proxy=proxy, reconnection=reconnection - 1)
         except ConnectionResetError:
-            pass
+            self.info['disney'] = '未知'
         except ProxyConnectionError as p:
             logger.warning("似乎目标端口未开启监听")
             logger.warning(str(p))
