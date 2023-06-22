@@ -76,7 +76,7 @@ api_hash = botconfig.get('api_hash', None)
 bot_token = botconfig.get('bot_token', None)
 clash_path = config.get_clash_path()  # 为clash核心运行路径, Windows系统需要加后缀名.exe
 clash_work_path = config.get_clash_work_path()  # clash工作路径
-corenum = min(config.config.get('clash', {}).get('core', 1), 64)
+corenum = min(config.config.get('clash', {}).get('core', 1), 128)
 admin = config.getAdmin()  # 管理员
 config.add_user(admin)
 config.reload()
@@ -143,10 +143,9 @@ def start_clash():
     loop = asyncio.get_event_loop()
     start_port = config.config.get('clash', {}).get('startup', 11220)
     port_list = [str(start_port + i * 2) for i in range(corenum)]
-    res1 = loop.run_until_complete(check_port(11219, 11219))
-    res2 = loop.run_until_complete(check_port(start_port, start_port + 1 + corenum * 2))
-    if res2 or res1:
-        logger.warning("端口检查中发现已有其他进程占用了端口，请更换端口,否则测试可能会出现不可预知的错误。")
+    res2 = loop.run_until_complete(check_port(start_port - 1, start_port + 1 + corenum * 2))
+    if res2:
+        logger.warning("端口检查中发现已有其他进程占用了端口，请更换端口,否则测试可能会出现不可预知的错误。(亦或者是您分开启动？)")
         return
     # if config.config.get('clash', {}).get('auto-start', False):
     print("开始启动clash core")
