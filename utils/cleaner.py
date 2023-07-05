@@ -391,22 +391,22 @@ class ClashCleaner:
         self.path = ''
         self.unsupport_type = ['wireguard', 'vless', 'hysteria']
         self.yaml = {}
-        if _config == ':memory:':
-            try:
-                self.yaml = yaml.safe_load(preTemplate()) if _config2 is None else yaml.safe_load(_config2)
-                return
-            except Exception as e:
-                logger.error(str(e))
-                self.yaml = {}
-                return
         if type(_config).__name__ == 'str':
-            with open(_config, 'r', encoding="UTF-8") as fp:
-                self.yaml = yaml.safe_load(fp)
-            self.path = _config
+            if _config == ':memory:':
+                try:
+                    self.yaml = yaml.safe_load(preTemplate()) if _config2 is None else yaml.safe_load(_config2)
+                    self.check_type()
+                    return
+                except Exception as e:
+                    logger.error(str(e))
+                    self.yaml = {}
+                    return
+            else:
+                with open(_config, 'r', encoding="UTF-8") as fp:
+                    self.yaml = yaml.safe_load(fp)
+                self.path = _config
         else:
             self.yaml = yaml.safe_load(_config)
-
-        self.check_type()
 
     def check_type(self):
         """
@@ -427,6 +427,7 @@ class ClashCleaner:
                 self.yaml = {}
                 return
             proxies: list = self.yaml['proxies']
+            newproxies = []
             for i, proxy in enumerate(proxies):
                 if isinstance(proxy, dict):
                     name = proxy['name']
@@ -434,10 +435,9 @@ class ClashCleaner:
                     if not isinstance(name, str):
                         # 将节点名称转为字符串
                         proxy['name'] = str(name)
-                    if ptype in self.unsupport_type:
-                        logger.warning(f"出现了可能不受支持的节点：{ptype}")
-                        proxies.pop(i)
-            self.yaml['proxies'] = proxies
+                    if ptype not in self.unsupport_type:
+                        newproxies.append(proxy)
+            self.yaml['proxies'] = newproxies
         except KeyError:
             logger.warning("读取节点信息失败！")
         except TypeError:
